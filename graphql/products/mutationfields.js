@@ -6,7 +6,7 @@ const GraphQLList = graphql.GraphQLList
 const GraphQLInt = graphql.GraphQLInt
 
 var { productType } = require('./inputtype')
-var products = require('../../data')
+var productServices = require('./services')
 
 const addProduct = {
   type: new GraphQLList(productType),
@@ -22,25 +22,26 @@ const addProduct = {
     }
   },
   resolve: function(_, args) {
-    products.push({
-      name: args.name,
-      price: args.price,
-      category: args.category
+    return new Promise((resolve, reject) => {
+      productServices.createProduct(args, (data) => {
+        resolve(data)
+      })
     })
-    return products
   }
 }
 
 const deleteProduct = {
   type: new GraphQLList(productType),
   args: {
-    name: {
+    id: {
       type: GraphQLString
     }
   },
   resolve: function(_, args) {
-    return products.filter(function(product){
-      return product.name != args.name
+    return new Promise((resolve, reject) => {
+      productServices.deleteProduct(args.id, (data) => {
+        resolve(data)
+      })
     })
   }
 }

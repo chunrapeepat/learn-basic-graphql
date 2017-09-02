@@ -5,13 +5,17 @@ const GraphQLString = graphql.GraphQLString
 const GraphQLList = graphql.GraphQLList
 const GraphQLInt = graphql.GraphQLInt
 
-var { productType } = require('./inputtype')
-var products = require('../../data')
+const { productType } = require('./inputtype')
+const productServices = require('./services')
 
 const getProducts = {
   type: new GraphQLList(productType),
   resolve: function(_, args) {
-    return products
+    return new Promise((resolve, reject) => {
+      productServices.getProducts((data) => {
+        resolve(data)
+      })
+    })
   }
 }
 
@@ -23,10 +27,11 @@ const getProductByPrice = {
     }
   },
   resolve: function(_, args) {
-    const filterProduct = products.filter(function(product){
-      return product.price <= args.price
+    return new Promise((resolve, reject) => {
+      productServices.getProductByPrice(args.price, (data) => {
+        resolve(data)
+      })
     })
-    return filterProduct
   }
 }
 
