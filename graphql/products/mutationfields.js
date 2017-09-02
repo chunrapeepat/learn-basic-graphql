@@ -24,7 +24,7 @@ const addProduct = {
   resolve: function(_, args) {
     return new Promise((resolve, reject) => {
       productServices.createProduct(args, (data) => {
-        resolve(data)
+        resolve([data])
       })
     })
   }
@@ -40,7 +40,7 @@ const deleteProduct = {
   resolve: function(_, args) {
     return new Promise((resolve, reject) => {
       productServices.deleteProduct(args.id, (data) => {
-        resolve(data)
+        resolve([data])
       })
     })
   }
